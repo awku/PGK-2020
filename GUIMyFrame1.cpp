@@ -41,10 +41,10 @@ GUIMyFrame1::GUIMyFrame1(wxWindow* parent)
 	Squa(),
 	Rhom(),
 	ptr_moving_shape(nullptr),
-	last_x(100000),
-	last_y(100000)
+	last_x(-1),
+	last_y(-1)
 {
-	//, move_shape(false), Btr_t(BigTr(true)), BTr_f(BigTr(false)), Mtr(MediumTr()), Str_t(SmallTr(true)), Str_f(SmallTr(false)), Squa(Square()), Rhom(Rhomboid())
+
 }
 
 void GUIMyFrame1::panelOnKeyDown(wxKeyEvent& event)
@@ -131,8 +131,8 @@ void GUIMyFrame1::panelOnMouseEvents(wxMouseEvent& event)
 		if (move_shape) {
 			move_shape = false;
 			ptr_moving_shape = nullptr;
-			last_x = 100000;
-			last_y = 100000;
+			last_x = -1;
+			last_y = -1;
 			//drop_shape();
 		}
 	}
@@ -143,8 +143,7 @@ void GUIMyFrame1::panelOnMouseEvents(wxMouseEvent& event)
 			if (!event.Leaving()) {
 				wxClientDC dc1(panel);
 				wxBufferedDC dc(&dc1);
-				dc.Clear();
-				if (last_x != 100000) {
+				if (last_x != -1) {
 					Matrix t = Set_Translation(event.GetX()-last_x, event.GetY()-last_y);
 					for (auto &v : ptr_moving_shape->d)
 						v = t * v;
@@ -158,6 +157,16 @@ void GUIMyFrame1::panelOnMouseEvents(wxMouseEvent& event)
 				ptr_moving_shape->Draw(&dc);
 				panel->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 			}
+		}
+	}
+	if (event.GetWheelRotation() != 0) {
+		if (move_shape) {
+			wxClientDC dc1(panel);
+			wxBufferedDC dc(&dc1);
+			Matrix t = Set_Rotate(event.GetWheelRotation()/8);
+			for (auto &v : ptr_moving_shape->d)
+				v = t * v;
+			ptr_moving_shape->Draw(&dc);
 		}
 	}
 }
