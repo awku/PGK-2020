@@ -1,39 +1,22 @@
 #include "Shapes.h"
 
-void Triangle::Draw(wxGraphicsContext *dc) {
-	wxPoint2DDouble list[2];
+void Triangle::Draw(wxBufferedDC *dc)const {
+	Vector start, end;
 	for (int i = 0; i < 3; i++) {
-		dc->SetPen(wxPen(wxColor(0, 0, 0), 1, wxSOLID));
-		list[0] = wxPoint2DDouble(d[i].GetX(), d[i].GetY());
-		list[1] = wxPoint2DDouble(d[i + 1].GetX(), d[i + 1].GetY());
-		dc->DrawLines(2, list);
+		start.Set(d[i].GetX(), d[i].GetY());
+		end.Set(d[i + 1].GetX(), d[i + 1].GetY());
+		dc->DrawLine(start.GetX(), start.GetY(), end.GetX(), end.GetY());
 	}
 }
 
-wxPoint Triangle::Center() const {
-	wxPoint tmp;
-	double xt = (d[1].GetX() + d[2].GetX()) / 2.;
-	double yt = (d[1].GetY() + d[2].GetY()) / 2.;
-	tmp.x = (d[0].GetX() + xt) / 2.;
-	tmp.y = (d[0].GetY() + yt) / 2.;
-	return tmp;
-}
+void Quadrangle::Draw(wxBufferedDC *dc)const {
+	Vector start, end;
 
-void Quadrangle::Draw(wxGraphicsContext *dc) {
-	wxPoint2DDouble list[2];
 	for (int i = 0; i < 4; i++) {
-		dc->SetPen(wxPen(wxColor(0, 0, 0), 1, wxSOLID));
-		list[0] = wxPoint2DDouble(d[i].GetX(), d[i].GetY());
-		list[1] = wxPoint2DDouble(d[i + 1].GetX(), d[i + 1].GetY());
-		dc->DrawLines(2, list);
+		start.Set(d[i].GetX(), d[i].GetY());
+		end.Set(d[i + 1].GetX(), d[i + 1].GetY());
+		dc->DrawLine(start.GetX(), start.GetY(), end.GetX(), end.GetY());
 	}
-}
-
-wxPoint Quadrangle::Center() const {
-	wxPoint tmp;
-	tmp.x = (d[0].GetX() + d[2].GetX()) / 2.;
-	tmp.y = (d[0].GetY() + d[2].GetY()) / 2.;
-	return tmp;
 }
 
 BigTr::BigTr(bool ver) : Triangle() {
@@ -43,18 +26,17 @@ BigTr::BigTr(bool ver) : Triangle() {
 }
 
 void BigTr::Reset() {
-	used = false;
 	if (v) {
-		d[0].Set(126, 126);
-		d[1].Set(0, 0);
-		d[2].Set(252, 0);
-		d[3].Set(126, 126);
+		d[0].Set(0, 0);
+		d[1].Set(252, 0);
+		d[2].Set(126, 126);
+		d[3].Set(0, 0);
 	}
 	else {
-		d[0].Set(126, 126);
-		d[1].Set(0, 0);
-		d[2].Set(0, 252);
-		d[3].Set(126, 126);
+		d[0].Set(0, 0);
+		d[1].Set(0, 252);
+		d[2].Set(126, 126);
+		d[3].Set(0, 0);
 	}
 }
 
@@ -65,12 +47,11 @@ SmallTr::SmallTr(bool ver) : Triangle() {
 }
 
 void SmallTr::Reset() {
-	used = false;
 	if (v) {
-		d[0].Set(63, 189);
-		d[1].Set(0, 252);
-		d[2].Set(126, 252);
-		d[3].Set(63, 189);
+		d[0].Set(0, 252);
+		d[1].Set(126, 252);
+		d[2].Set(63, 189);
+		d[3].Set(0, 252);
 	}
 	else {
 		d[0].Set(126, 126);
@@ -85,11 +66,10 @@ MediumTr::MediumTr() : Triangle() {
 }
 
 void MediumTr::Reset() {
-	used = false;
-	d[0].Set(252, 252);
-	d[1].Set(252, 126);
-	d[2].Set(126, 252);
-	d[3].Set(252, 252);
+	d[0].Set(126, 252);
+	d[1].Set(252, 252);
+	d[2].Set(252, 126);
+	d[3].Set(126, 252);
 }
 
 Square::Square() : Quadrangle() {
@@ -97,7 +77,6 @@ Square::Square() : Quadrangle() {
 }
 
 void Square::Reset() {
-	used = false;
 	d[0].Set(126, 126);
 	d[1].Set(189, 189);
 	d[2].Set(126, 252);
@@ -110,7 +89,6 @@ Rhomboid::Rhomboid() : Quadrangle() {
 }
 
 void Rhomboid::Reset() {
-	used = false;
 	d[0].Set(252, 0);
 	d[1].Set(252, 126);
 	d[2].Set(189, 189);
