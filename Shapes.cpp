@@ -1,97 +1,63 @@
-#include "Shapes.h"
+#pragma once
+#include "vecmat.h"
+#include <wx/graphics.h>
 
-void Triangle::Draw(wxBufferedDC *dc)const {
-	Vector start, end;
-	for (int i = 0; i < 3; i++) {
-		start.Set(d[i].GetX(), d[i].GetY());
-		end.Set(d[i + 1].GetX(), d[i + 1].GetY());
-		dc->DrawLine(start.GetX(), start.GetY(), end.GetX(), end.GetY());
-	}
-}
+class Shapes {
+public:
+	Shapes(){}
+	virtual void Draw(wxGraphicsContext *dc) = 0; // draw figure only there there it is
+	virtual void Reset() = 0;
+	Vector d[5]; // for triangles last part unused 
+	bool moving = false;
+	bool close = false;
+	bool used = false;
+	virtual wxPoint Center() const = 0;
+};
 
-void Quadrangle::Draw(wxBufferedDC *dc)const {
-	Vector start, end;
+class Triangle : public Shapes {
+public:
+	Triangle() {}
+	void Draw(wxGraphicsContext *dc) override;
+	virtual void Reset() = 0;
+	wxPoint Center() const override;
+};
 
-	for (int i = 0; i < 4; i++) {
-		start.Set(d[i].GetX(), d[i].GetY());
-		end.Set(d[i + 1].GetX(), d[i + 1].GetY());
-		dc->DrawLine(start.GetX(), start.GetY(), end.GetX(), end.GetY());
-	}
-}
+class Quadrangle : public Shapes {
+public:
+	Quadrangle() {}
+	void Draw(wxGraphicsContext *dc) override;
+	virtual void Reset() = 0;
+	wxPoint Center() const override;
+};
 
-BigTr::BigTr(bool ver) : Triangle() {
-	if (ver) v = true;
-	else v = false;
-	Reset();
-}
+class BigTr : public Triangle {
+public:
+	BigTr(bool);
+	void Reset() override;
+	bool v;
+};
 
-void BigTr::Reset() {
-	if (v) {
-		d[0].Set(0, 0);
-		d[1].Set(252, 0);
-		d[2].Set(126, 126);
-		d[3].Set(0, 0);
-	}
-	else {
-		d[0].Set(0, 0);
-		d[1].Set(0, 252);
-		d[2].Set(126, 126);
-		d[3].Set(0, 0);
-	}
-}
+class SmallTr : public Triangle {
+public:
+	SmallTr(bool);
+	void Reset() override;
+	bool v;
+};
 
-SmallTr::SmallTr(bool ver) : Triangle() {
-	if (ver) v = true;
-	else v = false;
-	Reset();
-}
+class MediumTr : public Triangle {
+public:
+	MediumTr();
+	void Reset() override;
+};
 
-void SmallTr::Reset() {
-	if (v) {
-		d[0].Set(0, 252);
-		d[1].Set(126, 252);
-		d[2].Set(63, 189);
-		d[3].Set(0, 252);
-	}
-	else {
-		d[0].Set(126, 126);
-		d[1].Set(189, 189);
-		d[2].Set(189, 63);
-		d[3].Set(126, 126);
-	}
-}
+class Square : public Quadrangle {
+public:
+	Square();
+	void Reset() override;
+};
 
-MediumTr::MediumTr() : Triangle() {
-	Reset();
-}
-
-void MediumTr::Reset() {
-	d[0].Set(126, 252);
-	d[1].Set(252, 252);
-	d[2].Set(252, 126);
-	d[3].Set(126, 252);
-}
-
-Square::Square() : Quadrangle() {
-	Reset();
-}
-
-void Square::Reset() {
-	d[0].Set(126, 126);
-	d[1].Set(189, 189);
-	d[2].Set(126, 252);
-	d[3].Set(63, 189);
-	d[4].Set(126, 126);
-}
-
-Rhomboid::Rhomboid() : Quadrangle() {
-	Reset();
-}
-
-void Rhomboid::Reset() {
-	d[0].Set(252, 0);
-	d[1].Set(252, 126);
-	d[2].Set(189, 189);
-	d[3].Set(189, 63);
-	d[4].Set(252, 0);
-}
+class Rhomboid : public Quadrangle {
+public:
+	Rhomboid();
+	void Reset() override;
+};
