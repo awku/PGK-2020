@@ -30,7 +30,7 @@ protected:
 	void checkOnButtonClick(wxCommandEvent& event);
 	void randomOnButtonClick(wxCommandEvent& event);
 	bool if_catch_shape(double x, double y);
-	bool is_in_this_shape(Shapes& shp, int sides, double x, double y, bool m, bool v);
+	bool is_in_this_shape(Shapes& shp, int sides, double x, double y, bool m, bool ver);
 
 public:
 	GUIFrame(wxWindow* parent);
