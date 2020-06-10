@@ -9,9 +9,10 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-MyFrame1::MyFrame1(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style) : wxFrame(parent, id, title, pos, size, style)
+Frame::Frame(wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style) : wxFrame(parent, id, title, pos, size, style)
 {
-	this->SetSizeHints(wxDefaultSize, wxDefaultSize);
+	wxSize maxsize(size.GetWidth()*2, size.GetHeight());
+	this->SetSizeHints(size, maxsize);
 
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer(wxVERTICAL);
@@ -33,7 +34,7 @@ MyFrame1::MyFrame1(wxWindow* parent, wxWindowID id, const wxString& title, const
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer(wxVERTICAL);
 
-	text = new wxStaticText(this, wxID_ANY, wxT("Legenda"), wxDefaultPosition, wxDefaultSize, 0);
+	text = new wxStaticText(this, wxID_ANY, wxT("Legenda: lewy przycisk myszy - wybór figury i poruszanie, lewy + prawy przycisk myszy - odbicie lustrzane figury, \n  lewy + kółko do przewijania - rotacja figury, klawisz ctrl - transformacje kilkoma figurami na raz"), wxDefaultPosition, wxDefaultSize, wxTC_MULTILINE);
 	text->Wrap(-1);
 	bSizer8->Add(text, 0, wxALL, 5);
 
@@ -62,44 +63,46 @@ MyFrame1::MyFrame1(wxWindow* parent, wxWindowID id, const wxString& title, const
 	this->Centre(wxBOTH);
 
 	// Connect Events
-	panel->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(MyFrame1::panelOnKeyDown), NULL, this);
-	panel->Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Connect(wxEVT_LEFT_UP, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Connect(wxEVT_MIDDLE_DOWN, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Connect(wxEVT_MIDDLE_UP, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Connect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Connect(wxEVT_RIGHT_UP, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Connect(wxEVT_MOTION, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Connect(wxEVT_LEFT_DCLICK, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Connect(wxEVT_MIDDLE_DCLICK, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Connect(wxEVT_RIGHT_DCLICK, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Connect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Connect(wxEVT_ENTER_WINDOW, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Connect(wxEVT_MOUSEWHEEL, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Connect(wxEVT_UPDATE_UI, wxUpdateUIEventHandler(MyFrame1::panelOnUpdateUI), NULL, this);
-	check->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame1::checkOnButtonClick), NULL, this);
-	random->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame1::randomOnButtonClick), NULL, this);
+	panel->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(Frame::panelOnKeyDown), NULL, this);
+	panel->Connect(wxEVT_KEY_UP, wxKeyEventHandler(Frame::panelOnKeyDown), NULL, this);
+	panel->Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Connect(wxEVT_LEFT_UP, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Connect(wxEVT_MIDDLE_DOWN, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Connect(wxEVT_MIDDLE_UP, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Connect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Connect(wxEVT_RIGHT_UP, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Connect(wxEVT_MOTION, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Connect(wxEVT_LEFT_DCLICK, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Connect(wxEVT_MIDDLE_DCLICK, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Connect(wxEVT_RIGHT_DCLICK, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Connect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Connect(wxEVT_ENTER_WINDOW, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Connect(wxEVT_MOUSEWHEEL, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Connect(wxEVT_UPDATE_UI, wxUpdateUIEventHandler(Frame::panelOnUpdateUI), NULL, this);
+	check->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Frame::checkOnButtonClick), NULL, this);
+	random->Connect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Frame::randomOnButtonClick), NULL, this);
 }
 
-MyFrame1::~MyFrame1()
+Frame::~Frame()
 {
 	// Disconnect Events
-	panel->Disconnect(wxEVT_KEY_DOWN, wxKeyEventHandler(MyFrame1::panelOnKeyDown), NULL, this);
-	panel->Disconnect(wxEVT_LEFT_DOWN, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Disconnect(wxEVT_LEFT_UP, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Disconnect(wxEVT_MIDDLE_DOWN, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Disconnect(wxEVT_MIDDLE_UP, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Disconnect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Disconnect(wxEVT_RIGHT_UP, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Disconnect(wxEVT_MOTION, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Disconnect(wxEVT_LEFT_DCLICK, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Disconnect(wxEVT_MIDDLE_DCLICK, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Disconnect(wxEVT_RIGHT_DCLICK, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Disconnect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Disconnect(wxEVT_ENTER_WINDOW, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Disconnect(wxEVT_MOUSEWHEEL, wxMouseEventHandler(MyFrame1::panelOnMouseEvents), NULL, this);
-	panel->Disconnect(wxEVT_UPDATE_UI, wxUpdateUIEventHandler(MyFrame1::panelOnUpdateUI), NULL, this);
-	check->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame1::checkOnButtonClick), NULL, this);
-	random->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame1::randomOnButtonClick), NULL, this);
+	panel->Disconnect(wxEVT_KEY_DOWN, wxKeyEventHandler(Frame::panelOnKeyDown), NULL, this);
+	panel->Disconnect(wxEVT_KEY_UP, wxKeyEventHandler(Frame::panelOnKeyDown), NULL, this);
+	panel->Disconnect(wxEVT_LEFT_DOWN, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Disconnect(wxEVT_LEFT_UP, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Disconnect(wxEVT_MIDDLE_DOWN, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Disconnect(wxEVT_MIDDLE_UP, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Disconnect(wxEVT_RIGHT_DOWN, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Disconnect(wxEVT_RIGHT_UP, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Disconnect(wxEVT_MOTION, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Disconnect(wxEVT_LEFT_DCLICK, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Disconnect(wxEVT_MIDDLE_DCLICK, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Disconnect(wxEVT_RIGHT_DCLICK, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Disconnect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Disconnect(wxEVT_ENTER_WINDOW, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Disconnect(wxEVT_MOUSEWHEEL, wxMouseEventHandler(Frame::panelOnMouseEvents), NULL, this);
+	panel->Disconnect(wxEVT_UPDATE_UI, wxUpdateUIEventHandler(Frame::panelOnUpdateUI), NULL, this);
+	check->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Frame::checkOnButtonClick), NULL, this);
+	random->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Frame::randomOnButtonClick), NULL, this);
 
 }

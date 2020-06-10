@@ -1,39 +1,47 @@
 #pragma once
 #include "vecmat.h"
-#include <wx/dcbuffer.h>
+#include <wx/graphics.h>
 
 class Shapes {
 public:
-	Shapes(){}
-	virtual void Draw(wxBufferedDC *dc)const = 0; // draw figure only there there it is
+	Shapes() {}
+	virtual ~Shapes() {}
+	virtual void Draw(wxGraphicsContext *dc) = 0;
 	virtual void Reset() = 0;
-	Vector d[5]; // for triangles last part unused 
+	virtual Vector Center() const = 0;
+	bool moving, close, used;
+	int len;
+	Vector d[5];
 };
 
 class Triangle : public Shapes {
 public:
-	Triangle() {}
-	void Draw(wxBufferedDC *dc)const override;
-	virtual void Reset() {}
+	Triangle();
+	virtual ~Triangle() {}
+	void Draw(wxGraphicsContext *dc) override;
+	virtual void Reset() = 0;
+	Vector Center() const override;
 };
 
 class Quadrangle : public Shapes {
 public:
-	Quadrangle() {}
-	void Draw(wxBufferedDC *dc)const override;
-	virtual void Reset() {}
+	Quadrangle();
+	virtual ~Quadrangle() {}
+	void Draw(wxGraphicsContext *dc) override;
+	virtual void Reset() = 0;
+	Vector Center() const override;
 };
 
 class BigTr : public Triangle {
 public:
-	BigTr(bool);
+	BigTr(bool ver);
 	void Reset() override;
 	bool v;
 };
 
 class SmallTr : public Triangle {
 public:
-	SmallTr(bool);
+	SmallTr(bool ver);
 	void Reset() override;
 	bool v;
 };

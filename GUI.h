@@ -20,14 +20,15 @@
 #include <wx/stattext.h>
 #include <wx/button.h>
 #include <wx/frame.h>
+#include <wx/graphics.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class MyFrame1
+/// Class Frame
 ///////////////////////////////////////////////////////////////////////////////
-class MyFrame1 : public wxFrame 
+class Frame : public wxFrame 
 {
 	private:
 	
@@ -43,13 +44,11 @@ class MyFrame1 : public wxFrame
 		virtual void panelOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void checkOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void randomOnButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
 	public:
+		Frame( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Tangram"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 850,650 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		
-		MyFrame1( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Tangram"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 850,650 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-		
-		~MyFrame1();
+		~Frame();
 	
 };
 
