@@ -43,17 +43,12 @@ void GUIFrame::panelOnKeyDown(wxKeyEvent& event)
 		ctrl = false;
 }
 
-
-//part of panelOnMouseEvents
 double f_lin(double a, double b, double x) {
 	return a * x + b;
 }
 
-//part of panelOnMouseEvents
-
-// algorithm explained here http://wazniak.mimuw.edu.pl/index.php?title=GKIW_Modu%C5%82_3_-_Podstawowe_operacje_rastrowe
-bool GUIFrame::is_in_this_shape(Shapes& shp, int sides, double x, double y, bool m = 0, bool ver = false) {
-	bool p_good = true;// if point is not inside this shape p_good must turn to false
+bool GUIFrame::is_in_this_shape(Shapes& shp, int sides, double x, double y, bool m = false, bool ver = false) {
+	bool p_good = true;
 	double a, b;
 	int j = 2;
 	for (int i = 0; i < sides; i++) {
@@ -124,10 +119,8 @@ bool GUIFrame::is_in_this_shape(Shapes& shp, int sides, double x, double y, bool
 }
 
 
-//part of panelOnMouseEvents
 bool GUIFrame::if_catch_shape(double x, double y) {
 	bool is_in_shape = true;
-	// if point (x,y) is not inside any of all shapes = is_in_shape turn to false 
 
 	int i = 6;
 	bool T = true;
